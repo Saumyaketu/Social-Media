@@ -6,6 +6,16 @@ const connectDB = require('./config/db');
 dotenv.config();
 const app = express();
 
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',  // vite dev
+    'https://saumyaketu-social-media.onrender.com', // deployed frontend
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, 
+  optionsSuccessStatus: 204 
+};
+
 // middleware
 app.use(cors());
 app.use(express.json());
