@@ -11,32 +11,34 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // Fetch posts and set user details from the first post found
-        const { data: allPosts } = await API.get('/posts');
-        
-        const userPosts = allPosts.filter(p => {
-          const authorId = p.author && (p.author._id || p.author);
-          return String(authorId) === String(id);
-        });
+  // Defined fetch function outside useEffect so it can be passed as a prop
+  const fetchProfileData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Fetch posts and set user details from the first post found
+      const { data: allPosts } = await API.get('/posts');
+      
+      const userPosts = allPosts.filter(p => {
+        const authorId = p.author && (p.author._id || p.author);
+        return String(authorId) === String(id);
+      });
 
-        setPosts(userPosts);
-        if (userPosts.length > 0) {
-            setUser(userPosts[0].author);
-        } else {
-            setUser({ name: 'User Profile', id });
-        }
-      } catch (err) {
-        console.error("Profile fetch error:", err);
-        setError("Could not load posts or profile data.");
-      } finally {
-        setLoading(false);
+      setPosts(userPosts);
+      if (userPosts.length > 0) {
+          setUser(userPosts[0].author);
+      } else {
+          setUser({ name: 'User Profile', id });
       }
-    };
+    } catch (err) {
+      console.error("Profile fetch error:", err);
+      setError("Could not load posts or profile data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchProfileData();
   }, [id]);
 
@@ -64,7 +66,7 @@ export default function Profile() {
             {profileName} hasn't shared anything.
           </Card>
         ) : (
-          posts.map(p => (<Post key={p._id} post={p} />)) 
+          posts.map(p => (<Post key={p._id} post={p} refresh={fetchProfileData} />))
         )}
       </div>
     </div>

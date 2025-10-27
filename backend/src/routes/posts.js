@@ -53,11 +53,17 @@ router.put('/:id', auth, async (req, res) => {
 // Delete post (owner only) -> DELETE /api/posts/:id
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
-    if (post.author.toString() !== req.user.id) return res.status(403).json({ message: 'Forbidden' });
+    // Used findOneAndDelete to atomically delete the post 
+    // by matching both the _id and the authenticated user's id (req.user.id).
+    const deletedPost = await Post.findOneAndDelete({
+      _id: req.params.id,
+      author: req.user.id
+    });
 
-    await post.remove();
+    if (!deletedPost) {
+      return res.status(403).json({ message: 'Forbidden or Post not found' });
+    }
+    
     res.json({ message: 'Post removed' });
   } catch (err) {
     console.error('Delete post error:', err);
