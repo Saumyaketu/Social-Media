@@ -27,6 +27,9 @@ connectDB(process.env.MONGO_URI);
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/posts', require('./routes/posts'));
 
+// Route for fetching user list
+app.use('/api/users', require('./routes/users'));
+
 // Basic health check
 app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 

@@ -21,7 +21,8 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <nav className="hidden sm:flex items-center gap-4">
             <Link to="/" className="text-sm text-gray-700 hover:text-linkedin">Feed</Link>
-            <Link to="/profile" className="text-sm text-gray-700 hover:text-linkedin">Profiles</Link>
+            {/* Link to the new list of all users */}
+            <Link to="/users" className="text-sm text-gray-700 hover:text-linkedin">Profiles</Link>
           </nav>
 
           {user ? (
