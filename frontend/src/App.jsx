@@ -6,6 +6,7 @@ import Feed from './pages/Feed';
 import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
 import { AuthContext } from './context/AuthContext';
+import Footer from './components/Footer';
 
 export default function App() {
   const { user } = useContext(AuthContext);
@@ -25,6 +26,8 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
+      
+      <Footer/>
     </div>
   );
 }
